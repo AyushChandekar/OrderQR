@@ -115,10 +115,15 @@ export default function MenuPage() {
         ) : (
           sections.map(section => (
             <div key={section.id} ref={el => sectionRefs.current[section.id] = el} className="scroll-mt-28">
-              <h2 className="text-base font-bold text-gray-900 mb-3 flex items-center space-x-2">
-                <span>{section.name}</span>
-                <span className="text-xs text-gray-400 font-normal">({section.items.length})</span>
-              </h2>
+              <div className="mb-3">
+                <h2 className="text-base font-bold text-gray-900 flex items-center space-x-2">
+                  <span>{section.name}</span>
+                  <span className="text-xs text-gray-400 font-normal">({section.items.length})</span>
+                </h2>
+                {section.description && (
+                  <p className="text-xs text-gray-400 mt-0.5">{section.description}</p>
+                )}
+              </div>
 
               <div className="space-y-3">
                 {section.items.map(item => {
