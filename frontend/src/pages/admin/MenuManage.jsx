@@ -223,11 +223,11 @@ export default function MenuManage() {
                         <input type="text" placeholder="Description (optional)" value={itemForm.description}
                           onChange={(e) => setItemForm({ ...itemForm, description: e.target.value })}
                           className="w-full px-3 py-2 bg-white border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-orange-500" />
-                        <div className="flex items-center justify-between">
-                          <div className="flex items-center space-x-4">
+                        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+                          <div className="flex flex-col sm:flex-row sm:items-center gap-3">
                             <input type="url" placeholder="Image URL (optional)" value={itemForm.imageUrl}
                               onChange={(e) => setItemForm({ ...itemForm, imageUrl: e.target.value })}
-                              className="px-3 py-2 bg-white border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-orange-500 w-64" />
+                              className="px-3 py-2 bg-white border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-orange-500 w-full sm:w-64" />
                             <label className="flex items-center space-x-2 text-sm text-gray-600 cursor-pointer">
                               <input type="checkbox" checked={itemForm.available}
                                 onChange={(e) => setItemForm({ ...itemForm, available: e.target.checked })}
@@ -235,7 +235,7 @@ export default function MenuManage() {
                               <span>Available</span>
                             </label>
                           </div>
-                          <div className="flex space-x-2">
+                          <div className="flex space-x-2 self-end">
                             <button type="button" onClick={() => { setShowItemForm(null); setEditingItemId(null); setItemForm(emptyItem) }}
                               className="px-3 py-2 text-sm text-gray-500 hover:text-gray-700">Cancel</button>
                             <button type="submit" className="bg-orange-500 text-white px-4 py-2 rounded-lg text-sm font-semibold hover:bg-orange-600 transition">

@@ -1,5 +1,7 @@
 import { useAuth } from '../../context/AuthContext'
 import { NavLink, Outlet, useNavigate } from 'react-router-dom'
+import qrIcon from "../../assets/QR_Order.svg";
+
 
 const tabs = [
   { to: '/admin/dashboard/orders', label: 'Orders', icon: 'M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2' },
@@ -23,9 +25,7 @@ export default function Dashboard() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 py-3 flex justify-between items-center">
           <div className="flex items-center space-x-3">
             <div className="w-10 h-10 bg-orange-500 rounded-xl flex items-center justify-center">
-              <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
-              </svg>
+              <img src={qrIcon} alt="QR Order" className="w-10 h-10" />
             </div>
             <div>
               <h1 className="text-lg font-bold text-gray-900 leading-tight">{admin?.restaurantName}</h1>
