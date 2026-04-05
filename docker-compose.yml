@@ -1,0 +1,66 @@
+services:
+  # -------- PostgreSQL --------
+  db:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: qrfood
+      POSTGRES_USER: ${DB_USERNAME:-postgres}
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-postgres}
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${DB_USERNAME:-postgres} -d qrfood"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  # -------- Spring Boot API --------
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    depends_on:
+      db:
+        condition: service_healthy
+    ports:
+      - "${PORT:-8080}:8080"
+    environment:
+      PORT: 8080
+      DATABASE_URL: jdbc:postgresql://db:5432/qrfood
+      DB_USERNAME: ${DB_USERNAME:-postgres}
+      DB_PASSWORD: ${DB_PASSWORD:-postgres}
+      JWT_SECRET: ${JWT_SECRET:-mySuperSecretKeyForJWTTokenGenerationThatIsAtLeast256BitsLong2024}
+      RAZORPAY_KEY_ID: ${RAZORPAY_KEY_ID:-rzp_test_xxxxxxxxxxxxx}
+      RAZORPAY_KEY_SECRET: ${RAZORPAY_KEY_SECRET:-your_razorpay_secret}
+      FRONTEND_URL: ${FRONTEND_URL:-http://localhost:3000}
+      ADMIN_USERNAME: ${ADMIN_USERNAME:-admin}
+      ADMIN_PASSWORD: ${ADMIN_PASSWORD:-admin123}
+      ADMIN_RESTAURANT: ${ADMIN_RESTAURANT:-My Restaurant}
+    healthcheck:
+      test: ["CMD-SHELL", "wget -qO- http://localhost:8080/api/health || exit 1"]
+      interval: 15s
+      timeout: 5s
+      retries: 5
+      start_period: 40s
+
+  # -------- React Frontend (nginx) --------
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+      args:
+        VITE_API_URL: ${VITE_API_URL:-http://localhost:8080}
+    restart: unless-stopped
+    depends_on:
+      backend:
+        condition: service_healthy
+    ports:
+      - "3000:80"
+
+volumes:
+  pgdata:
+    driver: local
